@@ -1,16 +1,16 @@
-body{
+body {
     background-color: steelblue;
 }
 
-.title{
+.title {
     font-size: xx-large;
 }
 
-.author{
+.author {
     font-size: small;
 }
 
-.turn{
+.turn {
     font-size: x-large;
 }
 
@@ -37,26 +37,41 @@ body{
     text-align: center;
 }
 
-#noDataAlert{
+#noDataAlert {
     position: relative;
     left: 35%;
     top: 50%;
 }
 
-.dataControl{
+.white-1e1d7 {
+    background-color: aliceblue;
+    color: black;
+}
+
+.black-3c85d {
+    background-color: steelblue;
+    color: white;
+}
+
+.dataControl {
     background-color: aliceblue;
     width: 10%;
     text-align: center;
     height: 30px;
     border: black solid 2px;
     color: black;
-    
 }
 
-.dataControl:hover{
+.dataControl:hover {
     background-color: lightblue;
     /* border-color: white; */
     /* color: white; */
+}
+
+#myBoard{
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, 0%);
 }
 
 nav {
@@ -64,34 +79,35 @@ nav {
     /* we go from column line 1 to 4 */
     grid-column-start: 1;
     grid-column-end: 4;
-    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
     text-align: center;
     border: black solid 3px;
 }
 
-.pie{
+.pie {
     background-color: white;
     border: 3px black solid;
     height: 500px;
     overflow-y: auto;
 }
 
-.table{
+.table {
     background-color: white;
     border: 3px black solid;
     height: 500px;
     overflow-y: auto;
 }
 
-.board{
+.board {
     background-color: white;
     border: 3px black solid;
     height: 500px;
     overflow-y: auto;
+    text-align: center;
 }
 
 footer {
     background-color: #b0c4de;
-    /* and a shorthand for columns 1-3 */ 
-    grid-column: 1 / 4;           
+    /* and a shorthand for columns 1-3 */
+    grid-column: 1 / 4;
 }

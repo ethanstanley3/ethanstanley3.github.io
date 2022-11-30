@@ -11,6 +11,20 @@ class Pie {
         d3.select("#pie_svg").style("display", "inline");
         d3.select("#noDataAlert").style("display", "none");
 
+        let width = document.querySelector('.pie').offsetWidth*0.95;
+        let height = width;
+        this.radius = width/2 - 20;
+        d3.select("#pie_svg")
+            .attr("width", width)
+            .attr("height", height)
+            .attr("margin", "auto")
+            .style("background-color", "white")
+            .select("g")
+            .attr(
+                "transform",
+                "translate(" + width / 2 + "," + height / 2 + ")"
+            );
+
         // draw the pie chart for the starting board
         this.updatePie();
     }
@@ -32,7 +46,7 @@ class Pie {
         // console.log(this.groups);
         let slice = this.groups.filter(d => d.data.move === move);
         // console.log(slice.selectAll("*"));
-        slice.selectAll("path").style("stroke-width", "3px");
+        slice.selectAll("path").style("stroke-width", "4px");
     }
 
     clearHighlight(){
@@ -48,20 +62,10 @@ class Pie {
 
     // redraws pie based on data in node
     updatePie() {
-        let width = document.querySelector('.pie').offsetWidth*0.95;
-        let height = width;
-        let radius = width/2 - 20;
-        let svg = d3
-            .select("#pie_svg")
-            .attr("width", width)
-            .attr("height", height)
-            .attr("margin", "auto")
-            .style("background-color", "white")
-            .append("g")
-            .attr(
-                "transform",
-                "translate(" + width / 2 + "," + height / 2 + ")"
-            );
+
+        let svg = d3.select("#pie_svg").select("g");
+        svg.html("");
+        
 
         let pie = d3.pie();
 
@@ -104,7 +108,7 @@ class Pie {
         let arc = d3.arc();
 
         // Let's tell it how large we want it
-        arc.outerRadius(radius);
+        arc.outerRadius(this.radius);
         // We also need to give it an inner radius...
         arc.innerRadius(0);
 
@@ -124,10 +128,7 @@ class Pie {
         groups
             .append("text")
             .text((d) => {return d.endAngle - d.startAngle > 3.14/20 ? d.data.move : ""})
-            // We need to move the label to the middle of the slice. Our arc generator
-            // is smart enough to know how to do this. Notice that arc.centroid gives us the center of the visible wedge.
             .attr("transform", (d) => "translate(" + arc.centroid(d) + ")")
-            // Finally some extra text styling to make it look nice:
             .attr("dy", ".35em")
             .style("text-anchor", "middle")
             .style("font-size", "15px")

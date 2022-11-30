@@ -3,14 +3,14 @@
     <head>
         <meta charset="UTF-8" />
         <title>Easier Openings</title>
-        <link rel="stylesheet" href="styles.css" />
         <script src="https://d3js.org/d3.v7.js"></script>
         <link
-            rel="stylesheet"
-            href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css"
-            integrity="sha384-q94+BZtLrkL1/ohfjR8c6L+A6qzNH9R2hBLwyoAfu3i/WCvQjzL2RQJ3uNHDISdU"
-            crossorigin="anonymous"
+        rel="stylesheet"
+        href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css"
+        integrity="sha384-q94+BZtLrkL1/ohfjR8c6L+A6qzNH9R2hBLwyoAfu3i/WCvQjzL2RQJ3uNHDISdU"
+        crossorigin="anonymous"
         />
+        <link rel="stylesheet" href="styles.css" />
         <script
             src="https://code.jquery.com/jquery-3.5.1.min.js"
             integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2"
@@ -44,7 +44,7 @@
                 <div class="turn">White to move!</div>
             </nav>
             <div class="pie">
-                <svg id="pie_svg"></svg>
+                <svg id="pie_svg"><g></g></svg>
                 <div id="noDataAlert" style="display: none">
                     End of game tree reached!
                 </div>
@@ -66,10 +66,10 @@
             </div>
             <footer>
                 <select name="datasets" id="datasets" class="dataControl">
-                    <option value="processed_data_100k.json">All skill levels</option>
-                    <option value="0-999.json">0 - 999 ELO</option>
-                    <option value="1000-1999.json">1000 - 1999 ELO</option>
-                    <option value="2000plus.json">2000+ ELO</option>
+                    <option value="500k-nofilter.json">All skill levels</option>
+                    <option value="50k-0-999.json">0 - 999 ELO</option>
+                    <option value="50k-1000-1999.json">1000 - 1999 ELO</option>
+                    <option value="50k-2000plus.json">2000+ ELO</option>
                 </select>
 
                 <button id="reloadButton" class="dataControl">Restart</button>

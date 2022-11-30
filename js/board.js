@@ -16,6 +16,7 @@ class Board {
             draggable: true,
             position: "start",
             onDragStart: this.onDragStart,
+            onDragMove: this.onDragMove,
             onDrop: this.onDrop,
             onSnapEnd: this.onSnapEnd,
         };
@@ -37,13 +38,18 @@ class Board {
         }
     }
 
-    getTurn(){
-        return this.game.turn();
+    onDragMove(newpos, prevpos, startpos, piece){
+        clearHighlight();
+        highlight(startpos + newpos);
     }
-
+    
     onDrop(source, target) {
         dropping = true;
         makeMove(source + target);
+    }
+    
+    getTurn(){
+        return this.game.turn();
     }
 
     moveSucceeded(move) {
@@ -139,6 +145,8 @@ class Board {
 
         let whiteSquareGrey = "#a9a9a9";
         let blackSquareGrey = "#696969";
+        // let whiteSquareGrey = "pink";
+        // let blackSquareGrey = "red";
 
         let background = whiteSquareGrey;
         if (target.hasClass("black-3c85d")) {
