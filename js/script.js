@@ -55,7 +55,7 @@ function loadDataset(path){
     });
 }
 
-loadDataset("processed_data_100k.json");
+loadDataset("500k-nofilter.json");
 
 document.querySelector("#datasets").oninput = function() {
     loadDataset(document.querySelector("#datasets").value)
