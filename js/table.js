@@ -72,9 +72,9 @@ class Table {
         this.frequencySvgHeight = 20;
         this.frequencyScale = d3.scaleLinear(
             [0, 100],
-            [0, this.frequencySvgWidth - 2 * this.barPadding]
+            [this.barPadding, this.frequencySvgWidth - this.barPadding]
         );
-        const frequencyTicks = ["0.0", "0.5", "1.0"];
+        const frequencyTicks = [0, 25, 50, 75, 100];
         let frequencyHeaderSvg = headerSvgs.filter(
             (d) => d.text === "Frequency"
         );
@@ -85,12 +85,12 @@ class Table {
             .attr(
                 "x1",
                 (d) =>
-                    this.barPadding + this.frequencyScale(100 * parseFloat(d))
+                    this.frequencyScale(d)
             )
             .attr(
                 "x2",
                 (d) =>
-                    this.barPadding + this.frequencyScale(100 * parseFloat(d))
+                    this.frequencyScale(d)
             )
             .attr("y1", this.headerCellHeight)
             .attr("y2", this.headerCellHeight - 5)
@@ -100,13 +100,12 @@ class Table {
             .data(frequencyTicks)
             .join("text")
             .attr("y", this.headerCellHeight - 8)
-            .text((d) => d)
+            .text((d) => d.toString())
             .attr(
                 "x",
                 (d) =>
-                    this.barPadding +
-                    100 * this.frequencyScale(d) -
-                    (d.length * 5) / 2
+                    this.frequencyScale(parseFloat(d)) -
+                    (d.toString().length * 8) / 2
             )
             .style("font-size", "10");
 
@@ -205,9 +204,9 @@ class Table {
             .attr("width", this.frequencySvgWidth)
             .attr("height", this.frequencySvgHeight)
             .append("rect")
-            .attr("x", this.barPadding)
+            .attr("x", this.frequencyScale(0))
             .style("fill", "steelblue")
-            .attr("width", (d) => this.frequencyScale(d.value))
+            .attr("width", (d) => this.frequencyScale(d.value) - this.frequencyScale(0))
             .attr("height", this.frequencySvgHeight);
 
         let percentageCells = cells.filter((d) => d.type === "win percentage");
@@ -218,9 +217,9 @@ class Table {
             .attr("width", this.percentagesSvgWidth)
             .attr("height", this.percentagesSvgHeight)
             .append("rect")
-            .attr("x", this.barPadding)
+            .attr("x", this.percentagesScale(0))
             .style("fill", "steelblue")
-            .attr("width", (d) => this.frequencyScale(d.value))
+            .attr("width", (d) => this.frequencyScale(d.value) - this.percentagesScale(0))
             .attr("height", this.frequencySvgHeight);
 
 
