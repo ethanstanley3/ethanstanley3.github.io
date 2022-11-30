@@ -43,6 +43,22 @@ body{
     top: 50%;
 }
 
+.dataControl{
+    background-color: aliceblue;
+    width: 10%;
+    text-align: center;
+    height: 30px;
+    border: black solid 2px;
+    color: black;
+    
+}
+
+.dataControl:hover{
+    background-color: lightblue;
+    /* border-color: white; */
+    /* color: white; */
+}
+
 nav {
     background-color: white;
     /* we go from column line 1 to 4 */

@@ -57,6 +57,10 @@ function loadDataset(path){
 
 loadDataset("processed_data_100k.json");
 
+document.querySelector("#datasets").oninput = function() {
+    loadDataset(document.querySelector("#datasets").value)
+}
+
 let button = document.querySelector("#reloadButton");
 button.addEventListener('click', function(){
     loadDataset(document.querySelector("#datasets").value)
