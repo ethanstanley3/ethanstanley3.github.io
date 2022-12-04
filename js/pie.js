@@ -2,6 +2,7 @@ let self = null;
 
 // the interactive Pie chart
 class Pie {
+    // creates a new pie
     constructor(tree, table) {
         self = this;
         this.tree = tree;
@@ -11,13 +12,13 @@ class Pie {
         d3.select("#pie_svg").style("display", "inline");
         d3.select("#noDataAlert").style("display", "none");
 
-        let width = document.querySelector('.pie').offsetWidth*0.95;
+        // set up the svg
+        let width = document.querySelector('.pie').offsetWidth*0.92;
         let height = width;
         this.radius = width/2 - 20;
         d3.select("#pie_svg")
             .attr("width", width)
             .attr("height", height)
-            .attr("margin", "auto")
             .style("background-color", "white")
             .select("g")
             .attr(
@@ -34,25 +35,23 @@ class Pie {
         this.board = board;
     }
 
+    // is the inputted move in the database
     playedMove(move){
-        if(move in this.node.children){
-            console.log(move + " is legal");
-            return true;
-        }
-        return false;
+        return move in this.node.children;
     }
 
+    // highlight a wedge of the pie chart
     highlight(move){
-        // console.log(this.groups);
         let slice = this.groups.filter(d => d.data.move === move);
-        // console.log(slice.selectAll("*"));
         slice.selectAll("path").style("stroke-width", "4px");
     }
 
+    // clear all highlighted wedges
     clearHighlight(){
         this.groups.selectAll("path").style("stroke-width", "0px");
     }
 
+    // update the pie if its a valid move
     update(move) {
         if (move in this.node.children) {
             this.node = this.node.children[move];
@@ -60,32 +59,36 @@ class Pie {
         }
     }
 
-    // redraws pie based on data in node
+    // redraws pie based on data in the current node of the game tree
     updatePie() {
 
         let svg = d3.select("#pie_svg").select("g");
+        // clear the old pie
         svg.html("");
         
-
         let pie = d3.pie();
 
+        // these are the moves played from this position
         let data = Object.values(this.node.children);
 
+        // compute total number of moves (for percentage calculations)
         let total = 0;
         data.forEach(function(item){
             total += item.n;
         });
 
-
+        // update table
         this.table.redrawTable(data);
 
+        // no moves in the database, notify the user
         if(data.length === 0){
-            // d3.select("#pie_svg").style("background-color", "red");
             d3.select("#pie_svg").style("display", "none");
             d3.select("#noDataAlert").style("display", "inline");
+            d3.select(".tooltip").style("display", "none");
             return;
         }
 
+        // pie wedge colors
         const colors = [
             "#7fc97f",
             "#beaed4",
@@ -97,8 +100,7 @@ class Pie {
             "#666666",
         ];
 
-        // Here we tell the pie generator which attribute
-        // of the object to use for the layout
+        // sizing pie slices based off of move frequency
         pie.value(function (d) {
             return d.n;
         });
@@ -107,17 +109,16 @@ class Pie {
 
         let arc = d3.arc();
 
-        // Let's tell it how large we want it
         arc.outerRadius(this.radius);
-        // We also need to give it an inner radius...
-        arc.innerRadius(0);
+        // donut chart or die
+        arc.innerRadius(30);
 
-        let groups = svg.selectAll("g").data(pieData).enter().append("g");
+        // when hovering over a wedge, cursor should indicate that they can be clicked
+        let groups = svg.selectAll("g").data(pieData).enter().append("g").attr("cursor", "pointer");
 
         this.groups = groups;
 
-        // Add the path, and use the arc generator to convert the pie data to
-        // an SVG shape
+        // draw the pie
         groups
             .append("path")
             .attr("d", arc)
@@ -125,6 +126,7 @@ class Pie {
             .style("stroke", "black")
             .style("stroke-width", "0px");
 
+        // center pie labels in sufficiently large wedges
         groups
             .append("text")
             .text((d) => {return d.endAngle - d.startAngle > 3.14/20 ? d.data.move : ""})
@@ -134,12 +136,12 @@ class Pie {
             .style("font-size", "15px")
             .style("font-weight", "bold");
         
+        // link click to other components
         groups.on("click", function(event, d){
-            console.log(event);
-            console.log(d);
             makeMove(d.data.move);
         })
 
+        // show tooltip and highlighting when hovering
         groups.on("mouseover mousemove", function(event, d){
             highlight(d.data.move);
             let tooltip = d3.select(".tooltip");
@@ -152,6 +154,7 @@ class Pie {
             tooltip.select(".winRate").html("Win rate: " + (100*parseFloat(d.data.wins)/parseFloat(d.data.n)).toFixed(2) + "%");
         })
 
+        // hide tooltip and clear highlighting
         groups.on("mouseout", function(event, data){
             clearHighlight();
             d3.select(".tooltip")

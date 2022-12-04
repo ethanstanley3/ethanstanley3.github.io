@@ -1,17 +1,22 @@
 let total = 0;
 
+// table with sortable columns and highlightable rows
 class Table {
+
+    // create the empty table
     constructor() {
         this.cellSvgWidths = 145;
         this.cellSvgHeights = 20;
         this.headerCellHeight = 50;
-        // stylize headers
+
         this.headerData = [
             { text: "Move", sorted: false, ascending: false },
             { text: "Frequency", sorted: false, ascending: false },
             { text: "Win Percentage", sorted: false, ascending: false },
         ];
-        let headerRow = d3.select("#header");
+
+        // create and stylize headers
+        let headerRow = d3.select("#header").style("cursor", "pointer");
         let headerCells = headerRow
             .selectAll("th")
             .data(this.headerData)
@@ -35,6 +40,7 @@ class Table {
             })
             .attr("y", this.headerCellHeight / 2);
 
+        // same as above
         this.percentagesSvgWidth = 145;
         this.percentagesSvgHeight = 20;
         this.barPadding = 15;
@@ -68,6 +74,7 @@ class Table {
             )
             .style("font-size", "10");
 
+        // same as above again
         this.frequencySvgWidth = 145;
         this.frequencySvgHeight = 20;
         this.frequencyScale = d3.scaleLinear(
@@ -109,12 +116,14 @@ class Table {
             )
             .style("font-size", "10");
 
+        // sort rows by header attribute when clicked
         let self = this;
         headerCells.on("click", function (d, i) {
             self.sort(self, d, i);
         });
     }
 
+    // highlight the raw matching the inputted move
     highlight(move){
         let row = this.rows.filter((d) => d.move === move);
         row.style("background-color", "lightgray");
@@ -124,6 +133,7 @@ class Table {
         this.rows.style("background-color", "");
     }
 
+    // change header attributes and redraw the table
     sort(self, event, data) {
         if (data.sorted) {
             data.ascending = !data.ascending;
@@ -134,17 +144,17 @@ class Table {
         self.redrawTable(self.data);
     }
 
+    // populate rows with data
     redrawTable(data) {
-        console.log(data);
 
+        // for percentage computation
         total = 0;
-
         data.forEach(function (move) {
             total += move.n;
         });
 
-        console.log(total);
 
+        // sort the data based on header attributes
         this.data = data;
         if (this.headerData[0].sorted) {
             // move
@@ -184,8 +194,9 @@ class Table {
             this.data.sort(compareFn);
         }
 
+        // bind data to rows
         let tableBody = d3.select("#tableBody");
-        let rows = tableBody.selectAll("tr").data(data).join("tr");
+        let rows = tableBody.selectAll("tr").data(data).join("tr").style("cursor", "pointer");
         this.rows = rows;
 
         let cells = rows
@@ -193,11 +204,12 @@ class Table {
             .data(this.rowToCellDataTransform)
             .join("td");
 
+        // fill in move label cells
         let phrases = cells.filter((d) => d.type === "move");
         phrases.text((d) => d.value).style("text-align", "center");
 
+        // create bar chart inside move frequency cells
         let frequencyCells = cells.filter((d) => d.type === "frequency");
-
         frequencyCells.html("");
         frequencyCells
             .append("svg")
@@ -209,8 +221,8 @@ class Table {
             .attr("width", (d) => this.frequencyScale(d.value) - this.frequencyScale(0))
             .attr("height", this.frequencySvgHeight);
 
+        // create bar chart in win % cells
         let percentageCells = cells.filter((d) => d.type === "win percentage");
-
         percentageCells.html("");
         let svgs = percentageCells
             .append("svg")
@@ -223,26 +235,29 @@ class Table {
             .attr("height", this.frequencySvgHeight);
 
 
+        // trigger highlight in all components of visualization
         rows.on("mouseover", function(event, d){
             highlight(d.move);
         });
 
+        // clear highlighting everywhere
         rows.on("mouseout", function(event, d){
             clearHighlight();
         });
 
+        // make move on all components
         rows.on("click", function(event, d){
             makeMove(d.move);
         })
     }
 
+    // convert data object into array so they can be joined into cell of the table
     rowToCellDataTransform(d) {
         let arr = [];
         arr.push({ type: "move", value: d.move });
         arr.push({
             type: "frequency",
             value: (100 * parseFloat(d.n)) / total,
-            // category: d.category,
         });
         arr.push({
             type: "win percentage",

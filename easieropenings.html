@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Easier Openings</title>
+        <script src="https://d3js.org/d3.v7.js"></script>
+        <link
+            rel="stylesheet"
+            href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css"
+            integrity="sha384-q94+BZtLrkL1/ohfjR8c6L+A6qzNH9R2hBLwyoAfu3i/WCvQjzL2RQJ3uNHDISdU"
+            crossorigin="anonymous"
+        />
+        <link rel="stylesheet" href="styles.css" />
+        <script
+            src="https://code.jquery.com/jquery-3.5.1.min.js"
+            integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2"
+            crossorigin="anonymous"
+        ></script>
+
+        <script
+            src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"
+            integrity="sha384-8Vi8VHwn3vjQ9eUHUxex3JSN/NFqUg3QbPyX8kWyb93+8AC/pPWTzj+nHtbC5bxD"
+            crossorigin="anonymous"
+        ></script>
+
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.2/chess.js"
+            integrity="sha384-s3XgLpvmHyscVpijnseAmye819Ee3yaGa8NxstkJVyA6nuDFjt59u1QvuEl/mecz"
+            crossorigin="anonymous"
+        ></script>
+    </head>
+
+    <body>
+        <div class="wrapper">
+            <nav>
+                <div class="controls">
+                    <select name="datasets" id="datasets" class="dataControl">
+                        <option value="500k-nofilter.json">All skill levels</option>
+                        <option value="50k-0-999.json">0 - 999 ELO</option>
+                        <option value="50k-1000-1999.json">1000 - 1999 ELO</option>
+                        <option value="50k-2000plus.json">2000+ ELO</option>
+                    </select>
+
+                    <button id="reloadButton" class="dataControl">Restart</button>
+                </div>
+                
+                <div class="titleDiv">
+                    <div class="title">Easier Openings</div>
+                    <div class="turn">White to move!</div>
+                </div>
+
+                <div class="links">
+                    <a href="about.html">About this project</a><br>
+                    <a href="process_book.pdf">Process book</a><br>
+                    <a href="https://ethanstanley3.github.io">Screen-cast</a>
+                </div>
+            </nav>
+            <div class="pie">
+                <div class="piechart">
+                    <div class="pieTitle">
+                        How often each move is played from the current position
+                    </div>
+                    <svg id="pie_svg"><g></g></svg>
+                </div>
+                <div id="noDataAlert" style="display: none">
+                    End of game tree reached!
+                </div>
+            </div>
+            <div class="table">
+                <table id="table">
+                    <thead id="header"></thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+            <div class="board">
+                <div id="myBoard"></div>
+            </div>
+            <footer>
+                <b>How to use this visualization:</b><br>
+                Hover over any element of the visualization to see the move highlighted on the other two components of the visualization.<br>
+                Make a move on the board, click a row of the table, or click a wedge of the pie chart to change the board state being visualized.<br>
+                Click a header of the table to sort the rows by that attribute.<br>
+                Use the dropdown in the top left to filter the games being visualized by the rating of the players.<br>
+                To return to the starting board state, click the "Restart" button.<br>
+                Drag a piece to a new location without releasing it to see which row of the table/wedge of the pie chart correspond to that move.
+            </footer>
+        </div>
+
+        <div class="tooltip" style="display: none">
+            <div class="move"></div>
+            <div class="usageRate"></div>
+            <div class="winRate"></div>
+        </div>
+
+        <script src="js/pie.js"></script>
+        <script src="js/board.js"></script>
+        <script src="js/table.js"></script>
+        <script src="js/script.js"></script>
+    </body>
+</html>
